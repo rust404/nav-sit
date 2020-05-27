@@ -1,0 +1,139 @@
+/* css reset */
+* {
+  box-sizing: border-box;
+}
+*::before {
+  box-sizing: border-box;
+}
+*::after {
+  box-sizing: border-box;
+}
+* {
+  margin: 0;
+  padding: 0;
+}
+img {
+  max-width: 100%;
+}
+a {
+  text-decoration: none;
+}
+ul,
+ol {
+  list-style: none;
+}
+
+body {
+  background-color: #f9f9f9;
+}
+#bgImage {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  display: none;
+}
+
+.content {
+  margin-left: 28px;
+  margin-right: 28px;
+}
+.search-form {
+  margin-top: 26px;
+  display: flex;
+}
+.search-form input {
+  flex: 1;
+  padding-left: 15px;
+  width: 100%;
+  height: 50px;
+  border-radius: 10px;
+  border: 1px solid grey;
+  font-size: 20px;
+}
+.search-form input:focus {
+  outline: none;
+  border: 1px solid #25b864;
+}
+.search-form button {
+  display: flex;
+  margin-left: 14px;
+  flex-shrink: 0;
+  justify-content: center;
+  align-items: center;
+  font-size: 32px;
+  color: #fff;
+  width: 50px;
+  height: 50px;
+  border-radius: 10px;
+  border-style: none;
+  background-color: #25b864;
+}
+.site-list {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+.site,
+.add-site {
+  display: flex;
+  width: 150px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  background-color: #fff;
+  overflow: hidden;
+  box-shadow: 0px 0px 6px #e3e3e3;
+}
+.add-site {
+  height: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 50px;
+}
+.site-wrapper {
+  position: relative;
+  display: flex;
+  width: 200%;
+  align-items: stretch;
+}
+.site-wrapper.animate {
+  transition: left 100ms linear;
+}
+.site-content {
+  width: 100%;
+  padding: 14px 0 0 14px;
+  height: 80px;
+  flex-shrink: 0;
+}
+.site-head {
+  display: flex;
+  align-items: center;
+}
+.site-img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+}
+.site-title {
+  margin-left: 8px;
+  font-size: 16px;
+  line-height: 20px;
+}
+.site-desc {
+  margin-top: 8px;
+  font-size: 12px;
+  color: #616161;
+}
+.site-delete-mobile-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50%;
+  color: #fff;
+  background-color: #ff5252;
+  flex-shrink: 0;
+}
