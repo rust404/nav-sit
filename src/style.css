@@ -179,6 +179,7 @@ body {
   }
   .site-wrapper:hover .site-remove-pc-btn {
     visibility: visible;
+  }
   site:hover,
   .add-site:hover {
     box-shadow: 4px 4px 10px #25b864;

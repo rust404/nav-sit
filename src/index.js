@@ -47,8 +47,10 @@ class Site {
     this.renderSites();
   }
   loadSites() {
-    if (window.localStorage.sites) {
-      const arr = JSON.parse(window.localStorage.sites);
+    const sites = window.localStorage.sites;
+    if (sites) {
+      console.log(sites);
+      const arr = JSON.parse(sites);
       if (Array.isArray(arr)) {
         this.siteArr = arr;
       }
@@ -169,7 +171,6 @@ function bindOpenSiteEvent() {
 }
 
 function bindSlideSiteEvent() {
-  let isTouching = false;
   let isSlided = false;
   let originX;
   let deltaXRec;
@@ -178,7 +179,6 @@ function bindSlideSiteEvent() {
     .on("touchstart", function (e) {
       const left = parseInt($(this).css("left"));
       isSlided = Math.abs(left) === LIMIT;
-      isTouching = true;
       deltaXRec = 0;
       originX = e.touches[0].clientX;
       $(this).removeClass("animate");
@@ -198,7 +198,6 @@ function bindSlideSiteEvent() {
       deltaXRec = deltaX;
     })
     .on("touchend", function (e) {
-      isTouching = false;
       $(this).addClass("animate");
       // 幅度不够
       if (Math.abs(deltaXRec) < LIMIT * 0.9) {
@@ -208,8 +207,14 @@ function bindSlideSiteEvent() {
       }
     });
 }
+function bindWindowLeaveEvent() {
+  window.onbeforeunload = function () {
+    s.saveSites();
+  };
+}
 // loadBackgroundImage();
 s = new Site();
 bindAddSiteEvent();
 bindOpenSiteEvent();
 bindRemoveSiteEvent();
+bindWindowLeaveEvent();
