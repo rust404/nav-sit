@@ -129,13 +129,9 @@ var Site = /*#__PURE__*/function () {
     _classCallCheck(this, Site);
 
     this.siteArr = [{
-      title: "百度",
-      url: "https://www.baidu.com",
-      desc: "搜索引擎"
-    }, {
-      title: "bilibili",
-      url: "https://www.bilibili.com",
-      desc: "二次元网站"
+      title: "掘金",
+      url: "https://juejin.im",
+      desc: "程序员社区"
     }, {
       title: "百度",
       url: "https://www.baidu.com",
@@ -145,69 +141,17 @@ var Site = /*#__PURE__*/function () {
       url: "https://www.bilibili.com",
       desc: "二次元网站"
     }, {
-      title: "百度",
-      url: "https://www.baidu.com",
+      title: "acfun",
+      url: "https://www.acfun.cn",
       desc: "搜索引擎"
     }, {
-      title: "bilibili",
-      url: "https://www.bilibili.com",
-      desc: "二次元网站"
+      title: "weibo",
+      url: "https://www.weibo.com",
+      desc: "新浪微博"
     }, {
-      title: "百度",
-      url: "https://www.baidu.com",
-      desc: "搜索引擎"
-    }, {
-      title: "bilibili",
-      url: "https://www.bilibili.com",
-      desc: "二次元网站"
-    }, {
-      title: "百度",
-      url: "https://www.baidu.com",
-      desc: "搜索引擎"
-    }, {
-      title: "bilibili",
-      url: "https://www.bilibili.com",
-      desc: "二次元网站"
-    }, {
-      title: "百度",
-      url: "https://www.baidu.com",
-      desc: "搜索引擎"
-    }, {
-      title: "bilibili",
-      url: "https://www.bilibili.com",
-      desc: "二次元网站"
-    }, {
-      title: "百度",
-      url: "https://www.baidu.com",
-      desc: "搜索引擎"
-    }, {
-      title: "bilibili",
-      url: "https://www.bilibili.com",
-      desc: "二次元网站"
-    }, {
-      title: "百度",
-      url: "https://www.baidu.com",
-      desc: "搜索引擎"
-    }, {
-      title: "bilibili",
-      url: "https://www.bilibili.com",
-      desc: "二次元网站"
-    }, {
-      title: "百度",
-      url: "https://www.baidu.com",
-      desc: "搜索引擎"
-    }, {
-      title: "bilibili",
-      url: "https://www.bilibili.com",
-      desc: "二次元网站"
-    }, {
-      title: "百度",
-      url: "https://www.baidu.com",
-      desc: "搜索引擎"
-    }, {
-      title: "bilibili",
-      url: "https://www.bilibili.com",
-      desc: "二次元网站"
+      title: "语雀",
+      url: "https://yuque.com",
+      desc: "阿里笔记神器"
     }];
     this.loadSites();
     this.renderSites();
@@ -216,6 +160,10 @@ var Site = /*#__PURE__*/function () {
   _createClass(Site, [{
     key: "addSite",
     value: function addSite(title, url, desc) {
+      if (!url.match(/^https?:\/\//)) {
+        url = "https://" + url;
+      }
+
       this.siteArr.push({
         title: title,
         url: url,
@@ -253,13 +201,14 @@ var Site = /*#__PURE__*/function () {
   }, {
     key: "renderSites",
     value: function renderSites() {
-      var content = this.siteArr.map(function (_ref) {
+      var content = this.siteArr.map(function (_ref, index) {
         var title = _ref.title,
             url = _ref.url,
             desc = _ref.desc;
-        return "\n        <li class=\"site\">\n          <div class=\"site-wrapper\">\n            <div class=\"site-content\">\n              <div class=\"site-head\">\n                <img\n                  src=\"".concat(url, "/favicon.ico\"\n                  alt=\"\"\n                  class=\"site-img\"\n                />\n                <span class=\"site-title\">").concat(title, "</span>\n              </div>\n              <p class=\"site-desc\">").concat(desc, "</p>\n            </div>\n            <div class=\"site-delete-mobile-btn\">\u5220\u9664</div>\n          </div>\n        </li>");
+        return "\n        <li class=\"site\" data-siteindex=\"".concat(index, "\">\n          <div class=\"site-wrapper\">\n            <div class=\"site-content\">\n              <div class=\"site-head\">\n                <img\n                  src=\"").concat(url, "/favicon.ico\"\n                  alt=\"\"\n                  class=\"site-img\"\n                />\n                <span class=\"site-title\">").concat(title, "</span>\n              </div>\n              <p class=\"site-desc\">").concat(desc, "</p>\n            </div>\n            <div class=\"site-remove-mobile-btn\">\u5220\u9664</div>\n            <div class=\"site-remove-pc-btn\">\n              <svg class=\"icon\" aria-hidden=\"true\">\n                <use xlink:href=\"#icon-baseline-close-px\"></use>\n              </svg>\n            </div>\n          </div>\n        </li>");
       }).join("\n");
       $(".site-list .add-site").siblings().remove().end().before(content);
+      bindSlideSiteEvent();
     }
   }]);
 
@@ -269,7 +218,6 @@ var Site = /*#__PURE__*/function () {
 function loadBackgroundImage() {
   var height = $(window).height();
   var width = $(window).width();
-  console.log(width, height);
   var topic = "universe";
   var url = "https://source.unsplash.com/".concat(width, "x").concat(height, "/?").concat(topic);
   var img = new Image();
@@ -277,72 +225,114 @@ function loadBackgroundImage() {
 
   img.onload = function () {
     $("#bgImage").attr("src", url).fadeIn();
-    console.log("loaded");
   };
 }
 
-s = new Site();
+function bindAddSiteEvent() {
+  $(".add-site").on("click", function (e) {
+    console.log(e.currentTarget);
+    var title = window.prompt("请输入网站标题");
+    if (!title) return;
+    var url = window.prompt("请输入网站地址");
+    if (!url) return;
+    var desc = window.prompt("请输入网站描述");
+    s.addSite(title, url, desc);
+  });
+}
 
-function bindEvent() {
-  bindAddSiteEvent();
-  bindRemoveSiteEvent();
+function isRemoveBtn(ele) {
+  var $ele = $(ele);
 
-  function bindAddSiteEvent() {
-    $(".add-site").on("click", function (e) {
-      var title = window.prompt("请输入网站标题");
-      if (!title) return;
-      var url = window.prompt("请输入网站地址");
-      if (!url) return;
-      var desc = window.prompt("请输入网站描述");
-      if (!desc) return;
-      s.addSite(title, url, desc);
-    });
+  while ($ele[0] !== document && !$ele.hasClass("site-remove-mobile-btn") && !$ele.hasClass("site-remove-pc-btn")) {
+    $ele = $ele.parent();
+    console.log($ele[0]);
   }
 
-  function bindRemoveSiteEvent() {
-    var isTouching = false;
-    var isSlided = false;
-    var originX;
-    var deltaXRec;
-    var LIMIT = $(".site-wrapper").width() / 2;
-    $(".site-wrapper").on("touchstart", function (e) {
-      console.log("start");
-      var left = parseInt($(this).css("left"));
-      isSlided = Math.abs(left) === LIMIT;
-      isTouching = true;
-      originX = e.touches[0].clientX;
-      $(this).removeClass("animate");
-    }).on("touchmove", function (e) {
-      var curX = e.touches[0].clientX;
-      var deltaX = curX - originX;
-      console.log("move", deltaX);
-      console.log("isSlide", isSlided);
+  return $ele[0] !== document;
+}
 
-      if (isSlided) {
-        if (deltaX < LIMIT && deltaX > 0) {
-          $(this).css("left", "".concat(-LIMIT + deltaX, "px"));
-        }
-      } else {
-        if (deltaX > -LIMIT && deltaX < 0) {
-          $(this).css("left", "".concat(deltaX, "px"));
-        }
-      }
+function bindRemoveSiteEvent() {
+  $(".site-list").on("click", removeEventhandler);
 
-      deltaXRec = deltaX;
-    }).on("touchend", function (e) {
-      isTouching = false;
-      $(this).addClass("animate"); // 幅度不够
+  function removeEventhandler(e) {
+    e.stopPropagation();
+    var target = e.target;
+    if (!isRemoveBtn(target)) return;
 
-      if (Math.abs(deltaXRec) < LIMIT * 0.9) {
-        $(this).css("left", isSlided ? "".concat(-LIMIT, "px") : "0px");
-      } else {
-        $(this).css("left", isSlided ? "0px" : "".concat(-LIMIT, "px"));
-      }
-    });
+    while (target.dataset && target.dataset.siteindex === undefined && target !== document) {
+      target = target.parentNode;
+    }
+
+    var index = target.dataset.siteindex;
+
+    if (window.confirm("\u786E\u5B9A\u5220\u9664\u7F51\u7AD9".concat(s.siteArr[index].title, "\uFF1F"))) {
+      s.removeSite(index);
+    }
   }
 }
 
-bindEvent(); // loadBackgroundImage();
+function bindOpenSiteEvent() {
+  $(".site-list").on("click", openEventHandler);
+
+  function openEventHandler(e) {
+    var target = e.target;
+    if (isRemoveBtn(target)) return;
+
+    while (target.dataset && target.dataset.siteindex === undefined && target !== document) {
+      target = target.parentNode;
+    }
+
+    if (target === document) return;
+    var index = target.dataset.siteindex;
+    window.open(s.siteArr[index].url);
+  }
+}
+
+function bindSlideSiteEvent() {
+  var isTouching = false;
+  var isSlided = false;
+  var originX;
+  var deltaXRec;
+  var LIMIT = $(".site-wrapper").width() / 2;
+  $(".site-wrapper").on("touchstart", function (e) {
+    var left = parseInt($(this).css("left"));
+    isSlided = Math.abs(left) === LIMIT;
+    isTouching = true;
+    deltaXRec = 0;
+    originX = e.touches[0].clientX;
+    $(this).removeClass("animate");
+  }).on("touchmove", function (e) {
+    var curX = e.touches[0].clientX;
+    var deltaX = curX - originX;
+
+    if (isSlided) {
+      if (deltaX < LIMIT && deltaX > 0) {
+        $(this).css("left", "".concat(-LIMIT + deltaX, "px"));
+      }
+    } else {
+      if (deltaX > -LIMIT && deltaX < 0) {
+        $(this).css("left", "".concat(deltaX, "px"));
+      }
+    }
+
+    deltaXRec = deltaX;
+  }).on("touchend", function (e) {
+    isTouching = false;
+    $(this).addClass("animate"); // 幅度不够
+
+    if (Math.abs(deltaXRec) < LIMIT * 0.9) {
+      $(this).css("left", isSlided ? "".concat(-LIMIT, "px") : "0px");
+    } else {
+      $(this).css("left", isSlided ? "0px" : "".concat(-LIMIT, "px"));
+    }
+  });
+} // loadBackgroundImage();
+
+
+s = new Site();
+bindAddSiteEvent();
+bindOpenSiteEvent();
+bindRemoveSiteEvent();
 },{}],"../../../../../.config/yarn/global/node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -371,7 +361,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "33171" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "42219" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
